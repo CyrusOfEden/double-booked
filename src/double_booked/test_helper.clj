@@ -33,7 +33,7 @@
 
 (defn event-stub []
   {:name (event-name (rand-nth occasion-names) (rand-nth person-names))
-   :interval (event-interval (t/now))})
+   :time (event-interval (t/now))})
 
 (defn stubbed-events [n]
   (into [] (take n (repeatedly event-stub))))
