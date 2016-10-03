@@ -1,6 +1,7 @@
-(ns double-booked.core)
+(ns double-booked.core
+  (:require [clj-time.core :as t]))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(defn overlapping-pairs [events]
+  (if-let [events (seq events)]
+    []
+    []))

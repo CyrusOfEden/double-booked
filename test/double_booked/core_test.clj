@@ -1,7 +1,10 @@
 (ns double-booked.core-test
   (:require [clojure.test :refer :all]
-            [double-booked.core :refer :all]))
+            [double-booked.test-helper :as helper]
+            [double-booked.core :as d]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(def events (helper/stubbed-events 16))
+
+(deftest empty-events-seq
+  (testing "An empty events list should return an empty list"
+    (is (= (d/overlapping-pairs []) []))))
