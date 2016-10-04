@@ -17,19 +17,18 @@
     [event-a event-b]
     [event-b event-a]))
 
-(defn- pairs [event events]
+(defn- pairs [event]
   """Pair an event with every other event in a sequence that overlaps with it"""
-  (let [xf (comp (take-while (partial overlap? event))
-                 (map (partial pair event)))]
-    (into () xf events)))
+  (comp (take-while #(overlap? event %))
+        (map #(pair event %))))
 
 (defn overlapping-pairs [events]
   """
   Given a sequence of events, each having a start and end time, return the sequence of all pairs of overlapping events.
   """
-  (loop [ps (list)
+  (loop [ps '()
          [e & es] (sort-by :start t/before? events)]
     (if (empty? es)
       ps
-      (recur (lazy-cat ps (pairs e es)) es))))
+      (recur (into ps (pairs e) es) es))))
 
