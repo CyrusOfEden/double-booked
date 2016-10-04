@@ -3,13 +3,9 @@
 
 (defrecord Event [name start end])
 
-(defn event-interval [record]
-  """Convert a map with :start and :end keys into a Joda interval"""
-  (t/interval (:start record) (:end record)))
-
 (defn overlap? [event-a event-b]
   """Check whether or not two events overlap"""
-  (t/overlaps? (event-interval event-a) (event-interval event-b)))
+  (and (t/before? (:start event-a) (:end event-b)) (t/before? (:start event-b) (:end event-a))))
 
 (defn- pair [event-a event-b]
   """Organize a pair of events such that the first one ends before the second one"""
