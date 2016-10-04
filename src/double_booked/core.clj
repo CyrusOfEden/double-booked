@@ -27,9 +27,9 @@
   """
   Given a sequence of events, each having a start and end time, return the sequence of all pairs of overlapping events.
   """
-  (loop [[e & es] (sort-by :start t/before? events)
-         ps (list)]
+  (loop [ps (list)
+         [e & es] (sort-by :start t/before? events)]
     (if (seq es)
-      (recur es (lazy-cat ps (overlapping-pairs e es)))
+      (recur (lazy-cat ps (overlapping-pairs e es)) es)
       ps)))
 
