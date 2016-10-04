@@ -2,6 +2,7 @@
   (:require [clj-time.core :as t]))
 
 (def start-time (comp t/start :time))
+(def end-time (comp t/end :time))
 
 (defn overlap? [event-a event-b]
   (t/overlaps? (:time event-a) (:time event-b)))
@@ -11,17 +12,15 @@
     [event-a event-b]
     [event-b event-a]))
 
-(defn overlaps [event events]
+(defn- overlapping-pairs [event events]
   (let [xf (comp (take-while #(overlap? event %))
                  (map #(vec (pair event %))))]
-    (into [] xf (sort-by start-time t/before? events))))
+    (into [] xf events)))
 
 (defn pairs [events]
-  (loop [ps [] [e & es] events]
+  (loop [[e & es] (sort-by start-time t/before? events)
+         ps (list)]
     (if (seq es)
-      (recur (lazy-cat ps (overlaps e es)) es)
+      (recur es (lazy-cat ps (overlapping-pairs e es)))
       ps)))
-
-(defn sorted-pairs [events]
-  (sort-by (comp start-time first) t/before? (pairs events)))
 
