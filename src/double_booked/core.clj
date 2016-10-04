@@ -12,9 +12,9 @@
     [event-b event-a]))
 
 (defn overlaps [event events]
-  (let [xf (comp (filter #(overlap? event %))
+  (let [xf (comp (take-while #(overlap? event %))
                  (map #(vec (pair event %))))]
-    (into [] xf events)))
+    (into [] xf (sort-by start-time t/before? events))))
 
 (defn pairs [events]
   (loop [ps [] [e & es] events]
