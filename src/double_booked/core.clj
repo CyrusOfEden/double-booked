@@ -21,7 +21,7 @@
   """Pair an event with every other event in a sequence that overlaps with it"""
   (let [xf (comp (take-while #(overlap? event %))
                  (map #(vec (pair event %))))]
-    (into [] xf events)))
+    (into () xf events)))
 
 (defn overlapping-pairs [events]
   """
