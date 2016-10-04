@@ -9,6 +9,7 @@
        (t/before? (:start event-b) (:end event-a))))
 
 (defn- sort-pair-by [key event-a event-b]
+  """Sort a given pair of events by key (:start or :end)"""
   (if (t/before? (key event-a) (key event-b))
     [event-a event-b]
     [event-b event-a]))
