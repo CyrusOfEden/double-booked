@@ -9,7 +9,7 @@ Given a sequence of events, each having a start and end time, write a program th
 ```clojure
 (require '[double-booked.core :as d])
 
-(d/pairs events-seq) ; => returns pairs of overlapping events
+(d/overlapping-pairs events-seq) ; => returns pairs of overlapping events
 ```
 
 ## Helpers

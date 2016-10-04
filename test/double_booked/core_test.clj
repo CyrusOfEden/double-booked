@@ -4,27 +4,15 @@
             [double-booked.test-helper :as helper]
             [double-booked.core :as d]))
 
-(deftest events-pair
-  (testing "A pair of events is sorted by start time"
-    (let [[event-a event-b] (helper/event-stubs 2)
-          actual (d/pair event-a event-b)]
-      (if (t/before? (:end event-a) (:end event-b))
-        (is (= [event-a event-b] actual))
-        (is (= [event-b event-a] actual))))))
-
 (deftest empty-events-seq
   (testing "An empty events sequence should return an empty list"
-    (let [expected []
-          actual (d/pairs [])]
-      (is (= expected actual)))))
+    (is (= (d/overlapping-pairs []) []))))
 
 (deftest events-seq-no-false-positives
   (testing "Expect all pairs to overlap, don't expect any false positives"
-    (letfn [(check [[event-a event-b]]
-              (t/overlaps? (d/event-interval event-a) (d/event-interval event-b)))]
-      (is (every? check (d/pairs (helper/event-stubs 16)))))))
+    (is (every? #(apply d/overlap? %) (d/overlapping-pairs (helper/event-stubs 16))))))
 
 (deftest events-seq-exhaustive
   (testing "Expect overlapping pairs function to return all overlaps"
-    (is (= 3 (count (d/pairs (helper/prepared-event-stubs)))))))
+    (is (= 3 (count (d/overlapping-pairs (helper/prepared-event-stubs)))))))
 

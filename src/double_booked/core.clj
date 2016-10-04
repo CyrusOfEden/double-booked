@@ -11,19 +11,19 @@
   """Check whether or not two events overlap"""
   (t/overlaps? (event-interval event-a) (event-interval event-b)))
 
-(defn pair [event-a event-b]
+(defn- pair [event-a event-b]
   """Organize a pair of events such that the first one ends before the second one"""
   (if (t/before? (:end event-a) (:end event-b))
     [event-a event-b]
     [event-b event-a]))
 
-(defn- overlapping-pairs [event events]
+(defn- pairs [event events]
   """Pair an event with every other event in a sequence that overlaps with it"""
   (let [xf (comp (take-while #(overlap? event %))
                  (map #(vec (pair event %))))]
     (into [] xf events)))
 
-(defn pairs [events]
+(defn overlapping-pairs [events]
   """
   Given a sequence of events, each having a start and end time, return the sequence of all pairs of overlapping events.
   """
@@ -31,5 +31,5 @@
          [e & es] (sort-by :start t/before? events)]
     (if (empty? es)
       ps
-      (recur (lazy-cat ps (overlapping-pairs e es)) es))))
+      (recur (lazy-cat ps (pairs e es)) es))))
 
