@@ -8,20 +8,18 @@
   (and (t/before? (:start event-a) (:end event-b))
        (t/before? (:start event-b) (:end event-a))))
 
-(defn- sort-pair-by [key event-a event-b]
-  """Sort a given pair of events by key (:start or :end)"""
-  (if (t/before? (key event-a) (key event-b))
-    [event-a event-b]
-    [event-b event-a]))
+(defn- sort-pair [sort? map-key event]
+  """Return a sorter for a given pair of events by key (:start or :end)"""
+  (if sort?
+    #(if (t/before? (map-key event) (map-key %))
+       [event %]
+       [% event])
+    #(-> [event %])))
 
-(defn- overlaps-for [event {:keys [sort-key sort-pairs]}]
+(defn- overlaps-for [event {:keys [sort-pairs sort-key]}]
   """Pair an event with every other event in a sequence that overlaps with it"""
-  (let [predfn #(overlap? event %)
-        mapfn (if sort-pairs
-                #(sort-pair-by sort-key % event)
-                #(-> [% event]))]
-    (comp (take-while predfn)
-          (map mapfn))))
+  (comp (take-while #(overlap? event %))
+        (map (sort-pair sort-pairs sort-key event))))
 
 (defn overlapping-pairs [events & {:keys [sort-pairs sort-key]
                                    :or [sort-pairs true
