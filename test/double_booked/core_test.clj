@@ -19,13 +19,12 @@
       (is (= expected actual)))))
 
 (deftest events-seq-no-false-positives
-  (testing "Exkpect all pairs to overlap, don't expect any false positives"
+  (testing "Expect all pairs to overlap, don't expect any false positives"
     (letfn [(check [[event-a event-b]]
               (t/overlaps? (:time event-a) (:time event-b)))]
       (is (every? check (d/pairs (helper/event-stubs 16)))))))
 
-
-
 (deftest events-seq-exhaustive
-  (testing "Expect overlapping pairs function to return all overlaps"))
+  (testing "Expect overlapping pairs function to return all overlaps"
+    (is (= 3 (count (d/pairs (helper/prepared-event-stubs)))))))
 
