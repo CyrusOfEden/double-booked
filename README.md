@@ -9,8 +9,12 @@ Given a sequence of events, each having a start and end time, write a program th
 ```clojure
 (require '[double-booked.core :as d])
 
-(d/overlapping-pairs events-seq) ; => returns pairs of overlapping events
-(d/overlapping-pairs events-seq :sort-pairs false) ; for a little speed boost if the pairs need not be ordered
+;; for pairs of overlapping events, each pair sorted by end time
+(d/overlapping-pairs events-seq)
+;; for a little speed boost if the pairs need not be ordered
+(d/overlapping-pairs events-seq :sort-pairs false)
+;; order pairs by ascending start time, not ascending end time (default)
+(d/overlapping-pairs events-seq :sort-key :start)
 ```
 
 ## Helpers
