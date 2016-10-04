@@ -5,7 +5,8 @@
 
 (defn overlap? [event-a event-b]
   """Check whether or not two events overlap"""
-  (and (t/before? (:start event-a) (:end event-b)) (t/before? (:start event-b) (:end event-a))))
+  (and (t/before? (:start event-a) (:end event-b))
+       (t/before? (:start event-b) (:end event-a))))
 
 (defn- sort-pair-by [key event-a event-b]
   (if (t/before? (key event-a) (key event-b))
