@@ -25,7 +25,7 @@ Given a sequence of events, each having a start and end time, write a program th
 ## Testing
 
 ```bash
-$ git clone https://github.com/knrz/double-booked
+$ git clone https://github.com/knrz/double-booked.git
 $ lein deps
 $ lein test
 ```
