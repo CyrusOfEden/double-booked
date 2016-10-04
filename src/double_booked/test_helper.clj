@@ -28,7 +28,7 @@
                    "beatrice"
                    "celine"])
 
-(defn event-name [occasion person]
+(defn- event-name [occasion person]
   (str (str/capitalize occasion) " with " (str/capitalize person)))
 
 (defn event-stub []
