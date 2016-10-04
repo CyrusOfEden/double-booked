@@ -8,7 +8,7 @@
   (testing "A pair of events is sorted by start time"
     (let [[event-a event-b] (helper/event-stubs 2)
           actual (d/pair event-a event-b)]
-      (if (t/before? (d/start-time event-a) (d/start-time event-b))
+      (if (t/before? (:start event-a) (:start event-b))
         (is (= [event-a event-b] actual))
         (is (= [event-b event-a] actual))))))
 
@@ -21,7 +21,7 @@
 (deftest events-seq-no-false-positives
   (testing "Expect all pairs to overlap, don't expect any false positives"
     (letfn [(check [[event-a event-b]]
-              (t/overlaps? (:time event-a) (:time event-b)))]
+              (t/overlaps? (d/event-interval event-a) (d/event-interval event-b)))]
       (is (every? check (d/pairs (helper/event-stubs 16)))))))
 
 (deftest events-seq-exhaustive

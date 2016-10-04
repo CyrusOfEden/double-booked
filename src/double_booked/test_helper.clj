@@ -1,12 +1,13 @@
 (ns double-booked.test-helper
-  (:require [clojure.string :as str]
+  (:require [double-booked.core :as d]
+            [clojure.string :as str]
             [clj-time.core :as t]))
 
 (defn- event-interval [base]
   (let [unit (rand-nth [#(t/minutes (* % 5)) t/hours])
         start (t/plus base (unit (rand-int 12)))
         end (t/plus start (unit (rand-int 12)))]
-    (t/interval start end)))
+    [start end]))
 
 (def occasion-names ["birthday"
                      "meeting"
@@ -32,8 +33,9 @@
   (str (str/capitalize occasion) " with " (str/capitalize person)))
 
 (defn event-stub []
-  {:name (event-name (rand-nth occasion-names) (rand-nth person-names))
-   :time (event-interval (t/now))})
+  (let [[start end] (event-interval (t/now))
+        name (event-name (rand-nth occasion-names) (rand-nth person-names))]
+    (d/->Event name start end)))
 
 (defn event-stubs [n]
   (into [] (take n (repeatedly event-stub))))
@@ -45,14 +47,10 @@
         two-hours (t/plus now (t/hours 2))
         four-hours (t/plus now (t/hours 4))
         six-hours (t/plus now (t/hours 6))]
-    [(merge (event-stub) {:time (t/interval now half-hour)
-                          :human-interval "now - half-hour"})
-     (merge (event-stub) {:time (t/interval two-hours four-hours)
-                          :human-interval "two-hours - four-hours"})
-     (merge (event-stub) {:time (t/interval hour six-hours)
-                          :human-interval "hour - six-hours"})
-     (merge (event-stub) {:time (t/interval now two-hours)
-                          :human-interval "now - two-hours"})]))
+    [(merge (event-stub) {:start now :end half-hour})
+     (merge (event-stub) {:start two-hours :end four-hours})
+     (merge (event-stub) {:start hour :end six-hours})
+     (merge (event-stub) {:start now :end two-hours})]))
 
 ;; EXPECTED
 ;; format:
