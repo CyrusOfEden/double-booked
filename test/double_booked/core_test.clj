@@ -8,7 +8,7 @@
   (testing "A pair of events is sorted by start time"
     (let [[event-a event-b] (helper/event-stubs 2)
           actual (d/pair event-a event-b)]
-      (if (t/before? (:start event-a) (:start event-b))
+      (if (t/before? (:end event-a) (:end event-b))
         (is (= [event-a event-b] actual))
         (is (= [event-b event-a] actual))))))
 
