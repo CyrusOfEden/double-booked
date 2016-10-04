@@ -1,7 +1,7 @@
 (ns double-booked.core
   (:require [clj-time.core :as t]))
 
-(declare overlap? sort-pair overlaps-for overlapping-pairs)
+(declare sort-pair overlaps-for overlap? overlapping-pairs)
 
 (defn- sort-pair [sort? map-key event]
   """Return a sorter for a given pair of events by key (:start or :end)"""
