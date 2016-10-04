@@ -29,7 +29,7 @@
   """
   (loop [ps (list)
          [e & es] (sort-by :start t/before? events)]
-    (if (seq es)
-      (recur (lazy-cat ps (overlapping-pairs e es)) es)
-      ps)))
+    (if-not (seq es)
+      ps
+      (recur (lazy-cat ps (overlapping-pairs e es)) es))))
 
