@@ -7,17 +7,16 @@
   """Check whether or not two events overlap"""
   (and (t/before? (:start event-a) (:end event-b)) (t/before? (:start event-b) (:end event-a))))
 
-(defn- sort-pair-by [key pair]
-  (let [[event-a event-b] pair]
-    (if (t/before? (key event-a) (key event-b))
-      pair
-      [event-b event-a])))
+(defn- sort-pair-by [key event-a event-b]
+  (if (t/before? (key event-a) (key event-b))
+    [event-a event-b]
+    [event-b event-a]))
 
 (defn- overlaps-for [event {:keys [sort-key sort-pairs]}]
   """Pair an event with every other event in a sequence that overlaps with it"""
   (let [predfn #(overlap? event %)
         mapfn (if sort-pairs
-                #(sort-pair-by sort-key [% event])
+                #(sort-pair-by sort-key % event)
                 #(-> [% event]))]
     (comp (take-while predfn)
           (map mapfn))))
