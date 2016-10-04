@@ -20,6 +20,12 @@
           actual (d/pairs [])]
       (is (= expected actual)))))
 
+(deftest events-seq-no-false-positives
+  (testing "Expect all pairs to overlap, don't expect any false positives"
+    (letfn [(check [[event-a event-b]]
+              (t/overlaps? (:time event-a) (:time event-b)))]
+      (is (every? check (d/pairs events))))))
+
 ;; (deftest two-events-seq
 ;;   (testing "A seq of two overlapping or non-overlapping events should behave properly"
 ;;     (let [event-a (rand-nth events)
